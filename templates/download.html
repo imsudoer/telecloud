@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- OG buda kotoriy -->
+    <meta property="og:title" content="{{ filename }} | OnlySq Cloud">
+    <meta property="og:description" content="Файл {{ filename }} загружен{% if username %} пользователем @{{ username }}{% else %} анонимно{% endif %} в OnlySq Cloud. Размер: {{ filesize }}. Просмотры: {{ views }} ({{ unique }})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{{ filename }} | OnlySq Cloud</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/utoast.css?v={{ version }}">
+    <link rel="shortcut icon" href="/static/svg/favicon.svg" type="image/svg">
+    <link rel="stylesheet" href="/static/css/download.css?v={{ version }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    
+    <header class="main-header">
+        <a href="/" class="header-logo">
+            <svg class="cloud-icon" viewBox="0 0 24 24" style="fill:#1a73e8; width: 32px; height: 32px;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+            OnlySq Cloud
+        </a>
+    </header>
+
+    <div class="file-view-container">
+        
+        <div class="file-info">
+            <h1 id="name">{{ filename }}</h1>
+            {% if viewable %}
+            <center><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iMjI1Ij48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM2NjYiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIj4gLSA8ZW5kZXJpbmcgcHJldmlldy4uLiAtIDwvdGV4dD48L3N2Zz4="
+                 alt="Предпросмотр файла {{ filename }}" 
+                 class="file-snapshot"
+                 id="file-snapshot-img"></center>
+            
+            <div id="preview-render-area">
+            </div>
+            {% endif %}
+            <div class="ghostbox" style="
+                display: grid; grid-template-columns: 50% 50%; 
+                gap: 4px 10px; color: var(--muted-text-color); 
+                text-align: left;">
+                <div style="text-align: right;">Размер</div>
+                <div>{{ filesize }}</div>
+
+                <div style="text-align: right;">Просмотры</div>
+                <div title="Количество (уникальные)">{{ views }} ({{ unique }})</div>
+
+                <div style="text-align: right;">Владелец</div>
+                {% if username %}<div>@{{ username }}</div>{% else %}<div>Anonymous</div>{% endif %}
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <a id="dlbutton" class="download-button" download>
+                Скачать
+            </a>
+             
+            <a id="repbutton" class="report-button" download>
+                Пожаловаться
+            </a>
+        </div>
+    </div>
+    <script src="/static/js/utoast.js?v={{ version }}"></script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashedMessages = {{ messages | tojson }};
+            
+            flashedMessages.forEach(function(item) {
+                const category = item[0] || 'info'; // 'success', 'error', 'warning', 'info'
+                const message = item[1];
+                
+                let toastType = 'info';
+                if (category === 'error' || category === 'danger') {
+                    toastType = 'error';
+                } else if (category === 'success') {
+                    toastType = 'success';
+                }
+            
+                if (typeof uShowToast === 'function') {
+                    uShowToast(message, toastType);
+                } else {
+                    console.warn('showToast function not found! Message:', message);
+                }
+            });
+        });
+    </script>
+    {% endif %}
+    {% endwith %}
+    {% if viewable %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const type = "."+"{{ filename }}".split(".")[1]
+            const fileId = window.location.pathname.split('/').at(-1);
+            const renderArea = document.getElementById('preview-render-area');
+            const snapshotImg = document.getElementById('file-snapshot-img');
+            const viewUrl = `/file/${fileId}?mode=view`;
+            
+            // snapshotImg.src = viewUrl;
+
+            // fetch(viewUrl)
+            //     .then(response => {
+            //         if (!response.ok || response.status === 204) {
+            //             throw new Error("Content not available for view mode.");
+            //         }
+            //         return response.text(); 
+            //     })
+            //     .then(htmlContent => {
+            //         if (htmlContent.includes('<head>')) {
+            //             renderArea.innerHTML = htmlContent;
+            //         } else {
+            //                 renderArea.innerHTML = htmlContent;
+            //         }
+                    
+            //         setTimeout(() => {
+            //             html2canvas(renderArea, {
+            //                 scale: 2,
+            //                 useCORS: true,
+            //                 backgroundColor: null
+            //             }).then(canvas => {
+            //                 const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            //                 snapshotImg.src = dataUrl;
+            //             }).catch(error => {
+            //                 console.error("html2canvas error:", error);
+            //                 snapshotImg.alt = "Ошибка рендеринга предпросмотра.";
+            //             });
+            //         }, 100);
+            //     })
+            //     .catch(error => {
+            //         console.error("Snapshot fetch error:", error);
+            //         snapshotImg.alt = "Предпросмотр недоступен.";
+            //         snapshotImg.src = "";
+            //     });
+
+            fetch(viewUrl)
+                .then(async response => {
+                    if (!response.ok || response.status === 204) {
+                        throw new Error("Content not available for view mode.");
+                    }
+                    
+                    const contentType = response.headers.get('Content-Type');
+                    
+                    if (contentType && contentType.startsWith('image/')) {
+                        const blob = await response.blob();
+                        snapshotImg.src = viewUrl;
+                        return;
+                    }
+
+                    return response.text(); 
+                })
+                .then(htmlContent => {
+                    if (typeof htmlContent === 'undefined') {
+                        return;
+                    }
+
+                    renderArea.innerHTML = htmlContent;
+                    
+                    setTimeout(() => {
+                        html2canvas(renderArea, {
+                            scale: 2,
+                            useCORS: true,
+                            backgroundColor: null
+                        }).then(canvas => {
+                            const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                            snapshotImg.src = dataUrl;
+                        }).catch(error => {
+                            console.error("html2canvas error:", error);
+                            snapshotImg.alt = "Ошибка рендеринга предпросмотра (Canvas).";
+                        });
+                    }, 100);
+                })
+                .catch(error => {
+                    console.error("Snapshot generation failed:", error);
+                    snapshotImg.alt = "Предпросмотр недоступен.";
+                    snapshotImg.src = "";
+                });
+        });
+    </script>
+    {% endif %}
+    <script src="/static/js/download.js?v={{ version }}"></script>
+</body>
+</html>

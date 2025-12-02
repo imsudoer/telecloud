@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ошибка 500 | OnlySq Cloud</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .error-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 50px 40px;
+            max-width: 450px;
+            width: 90%;
+            border-top: 6px solid #da3434;
+        }
+
+        .icon-telegram {
+            font-size: 5rem;
+            color: #34a8da;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .error-code {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #da3434;
+            margin-bottom: 5px;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #212121;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            font-size: 1rem;
+            color: #707070;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .tg-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #34a8da;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 2px 5px rgba(52, 168, 218, 0.4);
+        }
+
+        .tg-button:hover {
+            background-color: #2b8cb8;
+        }
+
+        .hline {
+            width: 100%;
+            height: 10px;
+            border-bottom: #969696 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="error-box">
+            <div class="error-code">HTTP {{ error_code }}</div>
+            <h3>Exception Details (Debug Mode)</h3>
+            <div class="message-box">
+                {{ error_message }}
+            </div>
+            <div class="hline"></div>
+        </div>
+        <p class="error-message">
+            Произошел сбой при обработке вашего запроса. Наша команда уведомлена и уже работает над восстановлением.
+            Пожалуйста, попробуйте обновить страницу или перейдите на главную.
+        </p>
+        <a href="{{ url_for('index') }}" class="tg-button">
+            Вернуться на Главную
+        </a><br><br>
+        <a href="{{ url_for('index') }}" class="tg-button">
+            Telegram чат
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OnlySq Cloud</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v={{ version }}">
+    <link rel="stylesheet" href="/static/css/utoast.css?v={{ version }}">
+    <link rel="shortcut icon" href="/static/svg/favicon.svg" type="image/svg">
+</head>
+<body>
+    <div class="drag-overlay" id="dragOverlay">
+        <svg class="dd" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill-rule="evenodd" clip-rule="evenodd" d="M8 10C8 7.79086 9.79086 6 12 6C14.2091 6 16 7.79086 16 10V11H17C18.933 11 20.5 12.567 20.5 14.5C20.5 16.433 18.933 18 17 18H16C15.4477 18 15 18.4477 15 19C15 19.5523 15.4477 20 16 20H17C20.0376 20 22.5 17.5376 22.5 14.5C22.5 11.7793 20.5245 9.51997 17.9296 9.07824C17.4862 6.20213 15.0003 4 12 4C8.99974 4 6.51381 6.20213 6.07036 9.07824C3.47551 9.51997 1.5 11.7793 1.5 14.5C1.5 17.5376 3.96243 20 7 20H8C8.55228 20 9 19.5523 9 19C9 18.4477 8.55228 18 8 18H7C5.067 18 3.5 16.433 3.5 14.5C3.5 12.567 5.067 11 7 11H8V10ZM15.7071 13.2929L12.7071 10.2929C12.3166 9.90237 11.6834 9.90237 11.2929 10.2929L8.29289 13.2929C7.90237 13.6834 7.90237 14.3166 8.29289 14.7071C8.68342 15.0976 9.31658 15.0976 9.70711 14.7071L11 13.4142V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13.4142L14.2929 14.7071C14.6834 15.0976 15.3166 15.0976 15.7071 14.7071C16.0976 14.3166 16.0976 13.6834 15.7071 13.2929Z" fill="#ffffff"></path> </g></svg>
+        
+        Отпустите, чтобы загрузить файл
+    </div>
+
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="mobile-header">
+        <button class="icon-btn" onclick="toggleSidebar()">
+            <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+        <div style="font-size: 18px; color: var(--text-color); font-weight: 500; user-select: none; align-items: center; display: flex; align-items: center; justify-content: space-between;">
+            <svg viewBox="0 0 24 24" style="fill:#1a73e8; width: 32px; height: 32px;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+            <span style="padding-left: 8px;">OnlySq Cloud</span>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="logo", style="user-select: none; color: var(--text-color);">
+            <svg viewBox="0 0 24 24" style="fill:#1a73e8; width: 32px; height: 32px;"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+            OnlySq Cloud
+        </div>
+
+        <button class="btn-new" onclick="triggerUpload()">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            Загрузить файл
+        </button>
+        
+        <div class="nav-item" style="user-select: none; margin-left: -16px;">
+            Мой Диск
+        </div>
+        <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--border-color);">
+             <div class="user-token-display" id="tokenDisplay" onclick="copyToken()">
+                Загрузка токена...
+            </div>
+            <div style="font-size: 11px; color: #9aa0a6; margin-top: 5px;">Нажмите, чтобы скопировать токен</div>
+            
+            <button class="load-btn" style="margin-top: 15px;" onclick="openLoadModal()">
+                Загрузить токен
+            </button>
+        </div>
+        <div class="sidebar-section" id="userInfoSection">
+            <div class="user-info-display">
+                <span class="user-info-label">Никнейм:</span>
+                <div class="username-container">
+                    @<span id="currentUsername" title="Клик - скопировать, Двойной клик - изменить">Загрузка...</span>
+                    <button id="editUsernameBtn" class="icon-btn edit-mobile-btn" style="display: none;" title="Изменить">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" fill="currentColor"/></g></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="username-edit-form" style="display: none;">
+                <input type="text" id="usernameInput" class="text-input" placeholder="Новый юзернейм">
+                <button id="saveUsernameBtn" class="button primary save-mobile-btn">Отправить</button>
+                <button id="cancelUsernameBtn" class="icon-btn cancel-mobile-btn" title="Отмена">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/></g></svg>
+                </button>
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <button id="themeToggle" class="button primary" style="width: 100%;">
+                Переключить тему ☀️
+            </button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="loader" id="loader"><div class="bar"></div></div>
+        
+        <div class="header">
+            <h2>Мои файлы</h2>
+        </div>
+
+        <div class="file-list-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50%">Название</th>
+                        <th>ID файла</th>
+                        <th>Owner Ключ</th>
+                        <th>Просмотры</th>
+                        <th>Размер</th>
+                        <th style="text-align: right; width: 160px">Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="fileTableBody">
+                    </tbody>
+            </table>
+            
+            <div id="emptyState" style="text-align: center; padding: 50px; color: #9aa0a6; display: none;">
+                <svg style="width: 64px; height: 64px; margin-bottom: 20px; fill: var(--border-color)" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                <br>Нет загруженных файлов
+            </div>
+        </div>
+    </div>
+
+    <div class="fab-upload" onclick="triggerUpload()">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+    </div>
+
+    <input type="file" id="fileInput" style="display: none" onchange="uploadFile(this)">
+        
+    <div class="toast" id="toast">Сообщение</div>
+
+    <div id="loadTokenModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeLoadModal()">&times;</span>
+            <h3>Загрузить токен сессии</h3>
+            <p>Введите ваш уникальный токен для входа:</p>
+            <input type="text" id="tokenInput" placeholder="Введите токен (мин. 26 символов)" class="token-input">
+            <button class="load-btn" onclick="loadTokenFromInput()">Войти</button>
+        </div>
+    </div>
+
+    <div id="uploadNotifications" class="upload-notifications-container"></div>
+
+    <script src="/static/js/utoast.js?v={{ version }}"></script>
+    <script src="/static/js/script.js?v={{ version }}"></script>
+    <script src="/static/js/dynflash.js?v={{ version }}"></script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flashedMessages = {{ messages | tojson }};
+            
+            flashedMessages.forEach(function(item) {
+                const category = item[0] || 'info'; // 'success', 'error', 'warning', 'info'
+                const message = item[1];
+                
+                let toastType = 'info';
+                if (category === 'error' || category === 'danger') {
+                    toastType = 'error';
+                } else if (category === 'success') {
+                    toastType = 'success';
+                }
+            
+                if (typeof uShowToast === 'function') {
+                    uShowToast(message, toastType);
+                } else {
+                    console.warn('uShowToast function not found! Message:', message);
+                }
+            });
+        });
+    </script>
+    {% endif %}
+    {% endwith %}
+</body>
+</html>

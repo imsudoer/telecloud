@@ -1,0 +1,166 @@
+body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #f8f9fa 100%);
+    min-height: 100vh;
+    display: block;
+    margin: 0;
+    padding-top: 60px; 
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    overflow-y: auto;
+}
+
+.main-header {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 184px;
+    height: 60px;
+    border-radius: 16px;
+    background-color: var(--surface-color);
+    box-shadow: var(--shadow-color-md);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 20px;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.cloud-icon {
+    width: 32px;
+    height: 32px;
+    fill: var(--primary-color);
+    margin-right: 8px;
+}
+
+.file-view-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto 40px auto; 
+    
+    background-color: var(--surface-color);
+    border-radius: 24px;
+    box-shadow: var(--shadow-color-lg);
+    padding: 40px 30px 60px 30px;
+    
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.file-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.file-icon-large {
+    width: 100px;
+    height: 100px;
+    fill: var(--muted-text-color); 
+}
+
+.download-button {
+    padding: 12px 30px;
+    height: 19px;
+    display: block;
+    text-align: center;
+    background-color: var(--button-color); 
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: var(--shadow-color-md);
+}
+
+.download-button:hover {
+    background-color: var(--button-h-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.report-button {
+    padding: 12px 30px;
+    height: 19px;
+    display: block;
+    text-align: center;
+    background-color: #bb1010; 
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: #bb1010;
+}
+
+.report-button:hover {
+    background-color: #da0a0a;
+    box-shadow: 0 0 6px 2px #da0a0a; 
+}
+
+.buttons {
+    display: flex;
+    gap: 5px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 72px;
+    }
+    
+    .main-header {
+        height: 50px;
+        width: calc(100% - 40px);
+    }
+
+    .buttons {
+        display: block;
+    }
+
+    .file-view-container {
+        width: calc(100% - 50px); 
+        margin: 0 auto 20px auto; 
+        padding: 20px 15px 50px 15px; 
+    }
+    
+    .file-preview {
+        height: 40vh; 
+        margin-bottom: 20px;
+    }
+}
+
+.file-snapshot {
+    width: 100%;
+    max-width: 400px;
+    object-fit: contain;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #e0e0e0;
+    display: block;
+}
+
+#preview-render-area {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    width: 400px;
+    height: 225px;
+    overflow: hidden;
+    background-color: white;
+}
